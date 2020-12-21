@@ -29,8 +29,19 @@
 </template>
 
 <script>
+
+//import fontawesome from "@fortawesome/fontawesome";
+//import brands from "@fortawesome/fontawesome-free-brands";
+// import 1 icon if you just need this one. Otherwise you can import the whole module
+//import faSpinner from "@fortawesome/fontawesome-free-solid/faSpinner"; 
+//import FontAwesomeIcon from "@fortawesome/vue-fontawesome";
+
 export default {
-    name: "Navbar"
+    name: "Navbar",
+    // components: {
+    //     FontAwesomeIcon
+    //     }
+
 }
 </script>
  

@@ -1,37 +1,31 @@
 <template>
   <div id="app">
     <Navbar></Navbar>
+      <!-- <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> -->
+    <router-view/>
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue'
-import axios from 'axios'
-
-
 
 export default {
-  name: 'App',
   components: {
     Navbar
-  },
-  data(){
-    return{
-      questions:[]
-    }
-  },
-  created() {
-      //console.log("helloooooo")
-      axios.get('https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple')
-      .then(res => console.log(this.questions=res.data.results))
-      console.log(this.questions)
-    }
-  // methods: {
-    
-  // }
+  }
+  
 }
 </script>
 
 <style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
 
 </style>
