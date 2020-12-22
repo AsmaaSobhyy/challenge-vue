@@ -6,29 +6,30 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" name="exampleRadios" id="radio1" value="option1">
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="0">
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[0]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" name="exampleRadios" id="radio1" value="option1" >
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="1" >
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[1]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" name="exampleRadios" id="radio1" value="option1" >
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="2" >
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[2]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" name="exampleRadios" id="radio1" value="option1" >
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value= '3' >
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[3]}}
                     </label>
                 </li>
+                
             </ul>
             <div class="card-footer">
                 <button class="btn btn-dark mx-2" v-bind:class="{ disabled:page <= 1}" v-on:click="onPrev" >prev</button>
@@ -50,18 +51,37 @@ export default {
         id:1,
         page:1,
         answers:[],
+        answerid:'',
+        chosen:[],
+        answeredn:0,
         isLoaded:false
 
         }
         
     },
     methods:{
+        // saves the chosen value and add answered count, unchicks next page we're going to if not answered
+        takeValue(toid){
+            if(this.answers[this.answerid]){
+                if(this.chosen[this.id] == ''){
+                  this.answeredn++
+                }
+                this.chosen[this.id]=this.answers[this.answerid]
+                
+            }
+            if(this.chosen[toid]==''){
+                this.unCheck()
+            }
+        },
         onNext(){
+            this.takeValue(this.id+1)
             this.page=this.page + 1
             this.$router.push({ path: `/question/${this.page}` })
             this.updateData()
+            console.log(this.answeredn)
         },
         onPrev(){
+            this.takeValue(this.id-1)
             this.page=this.page -1
             this.$router.push({ path: `/question/${this.page}` })
             this.updateData()
@@ -75,6 +95,14 @@ export default {
             // console.log(this.id)
             // console.log(this.answers)
             console.log(this.questions[this.id]['correct_answer'])
+        },
+        fillchosen(){
+            for (var i = 0; i < this.amount; i++) {
+                this.chosen.push('')
+            }
+        },
+        unCheck(){
+            this.answerid = false;
         }
     },
         
@@ -85,7 +113,9 @@ export default {
         this.updateData()
         this.isLoaded=true
         this.amount=this.api.split('amount=')[1].split('&')[0]
+        this.fillchosen()
         console.log(this.amount)
+
         })
         }
         
