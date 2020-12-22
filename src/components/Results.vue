@@ -21,6 +21,7 @@
                 
             </tbody>
             </table>
+            <button class="btn btn-dark">Restart</button>
     </div>
 </template>
 
