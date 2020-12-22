@@ -32,8 +32,8 @@
                 
             </ul>
             <div class="card-footer">
-                <!-- <button class="btn btn-dark mx-2" v-bind:class="{ disabled:page <= 1}" v-on:click="onPrev" >prev</button>
-                <button class="btn btn-dark" v-bind:class="{ disabled:page >= amount}" v-on:click="onNext">next</button> -->
+                <button class="btn btn-dark mx-2" v-bind:class="{ disabled: (id+1) <= 1}" v-on:click="onPrev" >prev</button>
+                <button class="btn btn-dark" v-bind:class="{ disabled:(id+1) >= getAmount}" v-on:click="onNext">next</button>
             </div>
         </div>
     </div>
@@ -47,12 +47,13 @@ export default {
     data(){
         return{
         answers:[],
-        answerid:''
+        answerid:'',
+        id:0
 
         }
         
     },
-    computed:mapGetters(['getQuestion','getId']),
+    computed:mapGetters(['getQuestion','getId','getAmount']),
     methods:{
         ...mapActions(['fillId']),
         // saves the chosen value and add answered count, unchicks next page we're going to if not answered
@@ -84,10 +85,10 @@ export default {
             console.log('prev')
         },
         updateData(){
-            this.answers=this.getQuestion[this.getId]['incorrect_answers']
-            this.answers.push(this.getQuestion[this.getId]['correct_answer'])
+            this.answers=this.getQuestion['incorrect_answers']
+            this.answers.push(this.getQuestion['correct_answer'])
             this.answers.sort()
-            console.log(this.questions[this.getId]['correct_answer'])
+            console.log(this.getQuestion['correct_answer'])
         },
         unCheck(){
             this.answerid = false;
@@ -96,6 +97,9 @@ export default {
         
     created() {
         this.fillId(location.pathname.split('/')[2]-1)
+        this.id=this.getId
+        console.log(this.getId)
+        this.updateData()
         }
         
     }

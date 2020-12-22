@@ -11,7 +11,8 @@ const state={
 
 const getters={
     getQuestion : (state) => state.questions[state.id],
-    getId : (state) => state.id
+    getId : (state) => state.id,
+    getAmount : (state) => state.amount
 }
 
 const actions ={
@@ -25,6 +26,7 @@ const actions ={
     async fetchQuestions({ commit }){
         const response = await axios.get(state.api)
         //console.log(response.data.results)
+
         commit('setQuestions',response.data.results)
     },
     fillAmount({ commit }){
