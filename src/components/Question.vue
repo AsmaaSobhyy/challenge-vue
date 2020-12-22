@@ -31,8 +31,8 @@
                 </li>
             </ul>
             <div class="card-footer">
-                <button class="btn btn-dark mx-2" v-on:click="onPrev" >prev</button>
-                <button class="btn btn-dark" v-on:click="onNext">next</button>
+                <button class="btn btn-dark mx-2" v-bind:class="{ disabled:page <= 1}" v-on:click="onPrev" >prev</button>
+                <button class="btn btn-dark" v-bind:class="{ disabled:page >= amount}" v-on:click="onNext">next</button>
             </div>
         </div>
     </div>
@@ -44,6 +44,8 @@ export default {
     name: "Question",
     data(){
         return{
+        api:"https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple",
+        amount:0,
         questions:[],
         id:1,
         page:1,
@@ -77,11 +79,13 @@ export default {
     },
         
     created() {
-        axios.get('https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple')
+        axios.get(this.api)
         .then(res =>{
         this.questions = res.data.results
         this.updateData()
         this.isLoaded=true
+        this.amount=this.api.split('amount=')[1].split('&')[0]
+        console.log(this.amount)
         })
         }
         
