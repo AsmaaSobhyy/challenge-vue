@@ -1,8 +1,8 @@
 <template>
-    <div class ='container my-5' v-if="isLoaded">
+    <div class ='container my-5'>
         <div class="card" style="width: 95%;">
             <div class="card-header">
-                {{this.questions[this.id]['question']}}
+                {{getQuestion['question']}}
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item px-2">
@@ -32,34 +32,29 @@
                 
             </ul>
             <div class="card-footer">
-                <button class="btn btn-dark mx-2" v-bind:class="{ disabled:page <= 1}" v-on:click="onPrev" >prev</button>
-                <button class="btn btn-dark" v-bind:class="{ disabled:page >= amount}" v-on:click="onNext">next</button>
+                <!-- <button class="btn btn-dark mx-2" v-bind:class="{ disabled:page <= 1}" v-on:click="onPrev" >prev</button>
+                <button class="btn btn-dark" v-bind:class="{ disabled:page >= amount}" v-on:click="onNext">next</button> -->
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios'
+    import {mapGetters, mapActions} from 'vuex'
+
 export default {
     name: "Question",
     data(){
         return{
-        api:"https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple",
-        amount:0,
-        questions:[],
-        id:1,
-        page:1,
         answers:[],
-        answerid:'',
-        chosen:[],
-        answeredn:0,
-        isLoaded:false
+        answerid:''
 
         }
         
     },
+    computed:mapGetters(['getQuestion','getId']),
     methods:{
+        ...mapActions(['fillId']),
         // saves the chosen value and add answered count, unchicks next page we're going to if not answered
         takeValue(toid){
             if(this.answers[this.answerid]){
@@ -74,32 +69,25 @@ export default {
             }
         },
         onNext(){
-            this.takeValue(this.id+1)
-            this.page=this.page + 1
-            this.$router.push({ path: `/question/${this.page}` })
-            this.updateData()
-            console.log(this.answeredn)
+            // this.takeValue(this.id+1)
+            // this.page=this.page + 1
+            // this.$router.push({ path: `/question/${this.page}` })
+            // this.updateData()
+            // console.log(this.answeredn)
+            console.log('next')
         },
         onPrev(){
-            this.takeValue(this.id-1)
-            this.page=this.page -1
-            this.$router.push({ path: `/question/${this.page}` })
-            this.updateData()
+            // this.takeValue(this.id-1)
+            // this.page=this.page -1
+            // this.$router.push({ path: `/question/${this.page}` })
+            // this.updateData()
+            console.log('prev')
         },
         updateData(){
-            this.id = location.pathname.split('/')[2]-1
-            this.page=this.id+1
-            this.answers=this.questions[this.id]['incorrect_answers']
-            this.answers.push(this.questions[this.id]['correct_answer'])
+            this.answers=this.getQuestion[this.getId]['incorrect_answers']
+            this.answers.push(this.getQuestion[this.getId]['correct_answer'])
             this.answers.sort()
-            // console.log(this.id)
-            // console.log(this.answers)
-            console.log(this.questions[this.id]['correct_answer'])
-        },
-        fillchosen(){
-            for (var i = 0; i < this.amount; i++) {
-                this.chosen.push('')
-            }
+            console.log(this.questions[this.getId]['correct_answer'])
         },
         unCheck(){
             this.answerid = false;
@@ -107,16 +95,7 @@ export default {
     },
         
     created() {
-        axios.get(this.api)
-        .then(res =>{
-        this.questions = res.data.results
-        this.updateData()
-        this.isLoaded=true
-        this.amount=this.api.split('amount=')[1].split('&')[0]
-        this.fillchosen()
-        console.log(this.amount)
-
-        })
+        this.fillId(location.pathname.split('/')[2]-1)
         }
         
     }

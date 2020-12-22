@@ -12,6 +12,7 @@
                     <a class="nav-link" aria-current="page" href="#">Previous</a>
                     </li>
                     <li class="nav-item">
+                    <i class="fas fa-info-circle"></i>
                     <a class="nav-link" >
                     1/10</a>
                     </li>
