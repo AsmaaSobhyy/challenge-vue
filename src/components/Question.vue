@@ -31,8 +31,8 @@
                 </li>
             </ul>
             <div class="card-footer">
-                <button class="btn btn-dark mx-2" >prev</button>
-                <button class="btn btn-dark">next</button>
+                <button class="btn btn-dark mx-2" v-on:click="onPrev" >prev</button>
+                <button class="btn btn-dark" v-on:click="onNext">next</button>
             </div>
         </div>
     </div>
@@ -46,23 +46,42 @@ export default {
         return{
         questions:[],
         id:1,
+        page:1,
         answers:[],
         isLoaded:false
 
         }
         
     },
+    methods:{
+        onNext(){
+            this.page=this.page + 1
+            this.$router.push({ path: `/question/${this.page}` })
+            this.updateData()
+        },
+        onPrev(){
+            this.page=this.page -1
+            this.$router.push({ path: `/question/${this.page}` })
+            this.updateData()
+        },
+        updateData(){
+            this.id = location.pathname.split('/')[2]-1
+            this.page=this.id+1
+            this.answers=this.questions[this.id]['incorrect_answers']
+            this.answers.push(this.questions[this.id]['correct_answer'])
+            this.answers.sort()
+            // console.log(this.id)
+            // console.log(this.answers)
+            console.log(this.questions[this.id]['correct_answer'])
+        }
+    },
+        
     created() {
         axios.get('https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple')
         .then(res =>{
         this.questions = res.data.results
-        this.id = location.pathname.split('/')[2]-1
-        this.answers=this.questions[this.id]['incorrect_answers']
-        this.answers.push(this.questions[this.id]['correct_answer'])
-        this.answers.sort()
+        this.updateData()
         this.isLoaded=true
-        console.log(this.answers)
-        console.log(this.questions[this.id]['correct_answer'])
         })
         }
         
