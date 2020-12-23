@@ -23,8 +23,8 @@ export default {
   },
   async created(){
     await this.fetchQuestions()
-    await this.fillchosen()
     await this.fillAmount()
+    await this.fillchosen()
     await this.fillchosenids()
   }
   }

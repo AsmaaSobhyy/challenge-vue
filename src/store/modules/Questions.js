@@ -12,11 +12,12 @@ const state={
 
 const getters={
     getQuestion : (state) => state.questions[state.id],
-    getallchosen : (state) => state.chosenids,
+    getallchosen : (state) => state.chosen,
     getId : (state) => state.id,
     getAmount : (state) => state.amount,
     getChosen : (state) => state.chosen[state.id],
-    getChosenid : (state) => state.chosenids[state.id]
+    getChosenid : (state) => state.chosenids[state.id],
+    getAnsweredn : (state) => state.answeredn
 }
 
 const actions ={
@@ -26,7 +27,8 @@ const actions ={
         for (var i = 0; i < state.amount; i++) {
             await X.push('')
         }
-        commit('setChosen',X)
+        await commit('setChosen',X)
+        //console.log(state.chosen)
     },
     async fillchosenids({ commit }){
         let X =[]
@@ -35,6 +37,7 @@ const actions ={
            await X.push(-1)
         }
         commit('setChosenids',X)
+        //console.log(state.chosenids)
     },
     async fetchQuestions({ commit }){
         const response = await axios.get(state.api)
@@ -47,11 +50,12 @@ const actions ={
         //console.log(state.amount)
 
     },
-    fillId({commit},id){
-        commit('setId',id)
+    async fillId({commit},id){
+        await commit('setId',id)
     },
     //add chosen value to array
     async editChosen({ commit },value){
+        // console.log(value)
         await commit('setChosed',value)
 
     },
@@ -61,10 +65,10 @@ const actions ={
     },
     async setAnsweredn({ commit }){
         let newn = await state.answeredn + 1
-        console.log(newn)
+        // console.log(newn)
         await commit('fillAnsweredn',newn)
-        console.log('answared num')
-        console.log(state.answeredn)
+        // console.log('answared num')
+        // console.log(state.answeredn)
     }
 
 }
@@ -75,9 +79,9 @@ const mutations={
     setChosenids : (state,emptyarr) => (state.chosenids = emptyarr),
     setAmount : (state,amount) => (state.amount = amount),
     setId : (state,id) => (state.id = id),
-    setChosed : (state,value) => (state.chosen[state.id],value),
-    setChosedid : (state,value) => (state.chosenids[state.id],value),
-    fillAnsweredn : (state,value) => (state.answeredn,value)
+    setChosed : (state,value) => (state.chosen[state.id]=value),
+    setChosedid : (state,value) => (state.chosenids[state.id]=value),
+    fillAnsweredn : (state,value) => (state.answeredn=value)
 }
 
 export default {

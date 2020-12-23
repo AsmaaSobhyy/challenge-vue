@@ -26,8 +26,17 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex'
+
 export default {
-    name: "Results"
+    name: "Results",
+    computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn']),
+    methods:{
+        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
+    },
+    created(){
+        console.log(this.getallchosen)
+    }
     
 }
 </script>
