@@ -36,7 +36,7 @@
                 <button class="btn btn-dark" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext">next</button>
             </div>
         </div>
-        <button class="btn btn-dark" v-bind:class="{ disabled: getAnsweredn < getAmount }" v-on:click="onSubmit" >Submit</button>
+        <button class="btn btn-dark my-5" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && (this.answerid != ''))  }" v-on:click="onSubmit" >Submit</button>
     </div>
 </template>
 
@@ -98,8 +98,8 @@ export default {
             console.log(this.getAnsweredn)
 
         },
-        onPrev(){
-            this.takeValue()
+        async onPrev(){
+            await this.takeValue()
             this.goto(this.getId-1)
             if(this.getChosenid == -1){
                 this.unCheck()
@@ -109,6 +109,9 @@ export default {
                 //document.getElementById(this.getChosenid).checked = true;
                 console.log('didnt chose')
             }
+            console.log(this.getallchosen)
+            console.log(this.getAnsweredn)
+
         },
         updateData(){
             this.answers=this.getQuestion['incorrect_answers']
@@ -122,8 +125,8 @@ export default {
             //document.getElementsByClassName("radio").checked ==false
             this.answerid =false
         },
-        onSubmit(){
-            this.takeValue()
+        async onSubmit(){
+            await this.takeValue()
             this.$router.push({ path: `/results` })
 
         }

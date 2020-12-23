@@ -12,11 +12,11 @@
                 <td scope="col">Your Answer</td>
                 <td scope="col">Points</td>
                 </tr>
-                <tr class ="text-dark">
-                <td scope="row">1</td>
-                <td >Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <tr class ="text-dark" v-for="(question, index) in getQuestions" :key="`question-${index}`" >
+                <td scope="row">{{question['question']}}</td>
+                <td >{{question['correct_answer']}}</td>
+                <td>{{getallchosen[index]}}</td>
+                <td>{{ question['question'] === getallchosen[index] ? 1 : 0 }}</td>
                 </tr>
                 
             </tbody>
@@ -30,7 +30,7 @@ import {mapGetters, mapActions} from 'vuex'
 
 export default {
     name: "Results",
-    computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn']),
+    computed:mapGetters(['getQuestions','getAmount','getallchosen','getAnsweredn']),
     methods:{
         ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
     },
