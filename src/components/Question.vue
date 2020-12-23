@@ -8,25 +8,25 @@
                 <li class="list-group-item px-2">
                     <input class="form-check-input mx-3 radio" type="radio" v-model="answerid" value="0" id="0">
                     <label class="form-check-label" for="exampleRadios1">
-                        {{this.answers[0]}}
+                        {{getcurrentAnswers[0]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
                     <input class="form-check-input mx-3 radio" type="radio" v-model="answerid" value="1" id="1" >
                     <label class="form-check-label" for="exampleRadios1">
-                        {{this.answers[1]}}
+                        {{getcurrentAnswers[1]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
                     <input class="form-check-input mx-3 radio" type="radio" v-model="answerid" value="2" id ='2' >
                     <label class="form-check-label" for="exampleRadios1">
-                        {{this.answers[2]}}
+                        {{getcurrentAnswers[2]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
                     <input class="form-check-input mx-3 radio" type="radio" v-model="answerid" value= '3' id='3'>
                     <label class="form-check-label" for="exampleRadios1">
-                        {{this.answers[3]}}
+                        {{getcurrentAnswers[3]}}
                     </label>
                 </li>
                 
@@ -36,7 +36,8 @@
                 <button class="btn btn-dark" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext">next</button>
             </div>
         </div>
-        <button class="btn btn-dark my-5" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && (this.answerid != '') && this.getChosenid == -1)  }" v-on:click="onSubmit" >Submit</button>
+        <span class="text-muted"></span>
+        <button class="btn btn-dark my-5" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && this.getChosenid == -1)  }" v-on:click="onSubmit" >Submit</button>
     </div>
 </template>
 
@@ -53,23 +54,18 @@ export default {
         }
         
     },
-    computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn']),
+    computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn','getcurrentAnswers']),
     methods:{
-        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
+        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid','setCurrentAnswers']),
         // saves the chosen value and add answered count, unchicks next page we're going to if not answered
         async takeValue(){
-            if(this.answers[this.answerid]){
+            if(this.getcurrentAnswers[this.answerid]){
                 if(this.getChosenid == -1){
                     //console.log('add')
                   await this.setAnsweredn()
                 }
-                await this.editChosen(this.answers[this.answerid])
+                await this.editChosen(this.getcurrentAnswers[this.answerid])
                 await this.editChosenid(this.answerid)
-                // console.log('answerid')
-                // console.log(this.getChosenid)
-                // console.log(this.answerid)
-                // console.log(this.getChosen)
-                // console.log(this.answers[this.answerid])
             }
             
             
@@ -88,14 +84,9 @@ export default {
             if(this.getChosenid == -1){
                 this.unCheck()
             }
-            else{
-                //console.log(this.getChosenid)
-                //document.getElementById(this.getChosenid).checked = true;
-                console.log('didnt chose')
-            }
 
-            console.log(this.getallchosen)
-            console.log(this.getAnsweredn)
+            // console.log(this.getallchosen)
+            // console.log(this.getAnsweredn)
 
         },
         async onPrev(){
@@ -104,18 +95,12 @@ export default {
             if(this.getChosenid == -1){
                 this.unCheck()
             }
-            else{
-                //console.log(this.getChosenid)
-                //document.getElementById(this.getChosenid).checked = true;
-                console.log('didnt chose')
-            }
-            console.log(this.getallchosen)
-            console.log(this.getAnsweredn)
+            // console.log(this.getallchosen)
+            // console.log(this.getAnsweredn)
 
         },
         updateData(){
-            this.answers=this.getQuestion['incorrect_answers']
-            this.answers.push(this.getQuestion['correct_answer'])
+            this.setCurrentAnswers()
             //this.answers.sort()
             //console.log(this.getQuestion['correct_answer'])
             //console.log(this.getId)

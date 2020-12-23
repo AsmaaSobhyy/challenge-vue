@@ -9,7 +9,7 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <button class="nav-link btn">Previous</button>
+                    <button class="nav-link btn" v-bind:class="{ disabled: (getId+1) <= 1}" v-on:click="onPrev" >Previous</button>
                     </li>
                     <li class="nav-item">
                     <i class="fas fa-info-circle"></i>
@@ -17,10 +17,11 @@
                     {{this.getId+1}}/10</a>
                     </li>
                     <li class="nav-item">
-                    <button class="nav-link btn">next</button>
+                    <button class="nav-link btn" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext" >next</button>
+                    
                     </li>
                     <li class="nav-item">
-                    <button class="nav-link btn">Results</button>
+                    <button class="nav-link btn" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && (this.answerid != '') && this.getChosenid == -1)  }" v-on:click="onSubmit" >Results</button>
                     </li>
                 </ul>
                 </div>
@@ -42,9 +43,85 @@ export default {
     // components: {
     //     FontAwesomeIcon
     //     },
+    data(){
+        return{
+        answers:[],
+        answerid:''
+        }
+    },
     computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn']),
     methods:{
-        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
+        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid','setCurrentAnswers']),
+    
+    async takeValue(){
+            if(this.answers[this.answerid]){
+                if(this.getChosenid == -1){
+                    //console.log('add')
+                  await this.setAnsweredn()
+                }
+                await this.editChosen(this.answers[this.answerid])
+                await this.editChosenid(this.answerid)
+                // console.log('answerid')
+                // console.log(this.getChosenid)
+                // console.log(this.answerid)
+                // console.log(this.getChosen)
+                // console.log(this.answers[this.answerid])
+            }
+            
+            
+            
+
+        },
+        goto(toid){
+            //console.log(toid)
+            this.fillId(toid)
+            this.$router.push({ path: `/question/${toid+1}` })
+            this.updateData()
+        },
+    async onNext(){
+            await this.takeValue()
+            this.goto(this.getId+1)
+            if(this.getChosenid == -1){
+                this.unCheck()
+            }
+            else{
+                //console.log(this.getChosenid)
+                //document.getElementById(this.getChosenid).checked = true;
+                console.log('didnt chose')
+            }
+
+            console.log(this.getallchosen)
+            console.log(this.getAnsweredn)
+
+        },
+        async onPrev(){
+            await this.takeValue()
+            this.goto(this.getId-1)
+            if(this.getChosenid == -1){
+                this.unCheck()
+            }
+            else{
+                //console.log(this.getChosenid)
+                //document.getElementById(this.getChosenid).checked = true;
+                console.log('didnt chose')
+            }
+            console.log(this.getallchosen)
+            console.log(this.getAnsweredn)
+
+        },
+        updateData(){
+            this.setCurrentAnswers()
+            
+        },
+        unCheck(){
+            //document.getElementsByClassName("radio").checked ==false
+            this.answerid =false
+        },
+        async onSubmit(){
+            await this.takeValue()
+            this.$router.push({ path: `/results` })
+
+        }
     }
 
 }

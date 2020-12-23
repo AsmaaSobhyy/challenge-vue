@@ -7,7 +7,8 @@ const state={
     id:0,
     chosen:[],
     answeredn:0,
-    chosenids:[]
+    chosenids:[],
+    currentAnswers:[]
 }
 
 const getters={
@@ -18,7 +19,8 @@ const getters={
     getAmount : (state) => state.amount,
     getChosen : (state) => state.chosen[state.id],
     getChosenid : (state) => state.chosenids[state.id],
-    getAnsweredn : (state) => state.answeredn
+    getAnsweredn : (state) => state.answeredn,
+    getcurrentAnswers:(state) => state.currentAnswers
 }
 
 const actions ={
@@ -70,6 +72,15 @@ const actions ={
         await commit('fillAnsweredn',newn)
         // console.log('answared num')
         // console.log(state.answeredn)
+    },
+    setCurrentAnswers({ commit }){
+        let ans=[]
+        for(var i=0;i<3;i++){
+            ans.push(state.questions[state.id]['incorrect_answers'][i]) 
+        }
+        ans.push(state.questions[state.id]['correct_answer'])
+        ans.sort()
+        commit('fillcurrentAnswered',ans)
     }
 
 }
@@ -82,7 +93,8 @@ const mutations={
     setId : (state,id) => (state.id = id),
     setChosed : (state,value) => (state.chosen[state.id]=value),
     setChosedid : (state,value) => (state.chosenids[state.id]=value),
-    fillAnsweredn : (state,value) => (state.answeredn=value)
+    fillAnsweredn : (state,value) => (state.answeredn=value),
+    fillcurrentAnswered :(state,arr) => (state.currentAnswers = arr)
 }
 
 export default {
