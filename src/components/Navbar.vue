@@ -9,18 +9,18 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Previous</a>
+                    <button class="nav-link btn">Previous</button>
                     </li>
                     <li class="nav-item">
                     <i class="fas fa-info-circle"></i>
                     <a class="nav-link" >
-                    1/10</a>
+                    {{this.getId+1}}/10</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#">next</a>
+                    <button class="nav-link btn">next</button>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#">Results</a>
+                    <button class="nav-link btn">Results</button>
                     </li>
                 </ul>
                 </div>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-
+import {mapGetters, mapActions} from 'vuex'
 //import fontawesome from "@fortawesome/fontawesome";
 //import brands from "@fortawesome/fontawesome-free-brands";
 // import 1 icon if you just need this one. Otherwise you can import the whole module
@@ -41,7 +41,11 @@ export default {
     name: "Navbar",
     // components: {
     //     FontAwesomeIcon
-    //     }
+    //     },
+    computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn']),
+    methods:{
+        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
+    }
 
 }
 </script>

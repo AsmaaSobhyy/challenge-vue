@@ -16,7 +16,11 @@
                 <td scope="row">{{question['question']}}</td>
                 <td >{{question['correct_answer']}}</td>
                 <td>{{getallchosen[index]}}</td>
-                <td>{{ question['question'] === getallchosen[index] ? 1 : 0 }}</td>
+                <td>{{ (question['correct_answer'] === getallchosen[index]) ? 1 : 0 }}</td>
+                </tr>
+                <tr class="table-active font-weight-light">
+                <td colspan="3" >Total Points</td>
+                <td scope="col">{{points}}</td>
                 </tr>
                 
             </tbody>
@@ -26,16 +30,28 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters} from 'vuex'
 
 export default {
     name: "Results",
+    data(){
+        return{
+        points:0
+
+        }
+
+    },
     computed:mapGetters(['getQuestions','getAmount','getallchosen','getAnsweredn']),
     methods:{
-        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
+        
     },
     created(){
-        console.log(this.getallchosen)
+        //console.log(this.getallchosen)
+        for(var i=0;i<this.getAmount;i++){
+            if(this.getQuestions[i]['correct_answer']===this.getallchosen[i]){
+                this.points++
+            }
+        }
     }
     
 }

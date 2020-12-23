@@ -36,7 +36,7 @@
                 <button class="btn btn-dark" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext">next</button>
             </div>
         </div>
-        <button class="btn btn-dark my-5" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && (this.answerid != ''))  }" v-on:click="onSubmit" >Submit</button>
+        <button class="btn btn-dark my-5" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && (this.answerid != '') && this.getChosenid == -1)  }" v-on:click="onSubmit" >Submit</button>
     </div>
 </template>
 
