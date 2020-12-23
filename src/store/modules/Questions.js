@@ -12,10 +12,12 @@ const state={
 const getters={
     getQuestion : (state) => state.questions[state.id],
     getId : (state) => state.id,
-    getAmount : (state) => state.amount
+    getAmount : (state) => state.amount,
+    getChosen : (state) => state.chosen[state.id]
 }
 
 const actions ={
+    //initial fill chosen array
     fillchosen({ commit }){
         let X =[]
         for (var i = 0; i < this.amount; i++) {
@@ -34,6 +36,15 @@ const actions ={
     },
     fillId({commit},id){
         commit('setId',id)
+    },
+    //add chosen value to array
+    editChosen({ commit },value){
+        commit('setChosed',value)
+
+    },
+    setAnsweredn({ commit }){
+        commit('fillAnsweredn',state.answeredn+1)
+        console.log(state.answeredn)
     }
 
 }
@@ -42,7 +53,9 @@ const mutations={
     setQuestions:(state,questions)=> (state.questions = questions),
     setChosen : (state,emptyarr) => (state.chosen = emptyarr),
     setAmount : (state,amount) => (state.amount = amount),
-    setId : (state,id) => (state.id = id)
+    setId : (state,id) => (state.id = id),
+    setChosed : (state,value) => (state.chosen[state.id],value),
+    fillAnsweredn : (state,value) => (state.answeredn,value)
 }
 
 export default {

@@ -32,8 +32,8 @@
                 
             </ul>
             <div class="card-footer">
-                <button class="btn btn-dark mx-2" v-bind:class="{ disabled: (id+1) <= 1}" v-on:click="onPrev" >prev</button>
-                <button class="btn btn-dark" v-bind:class="{ disabled:(id+1) >= getAmount}" v-on:click="onNext">next</button>
+                <button class="btn btn-dark mx-2" v-bind:class="{ disabled: (getId+1) <= 1}" v-on:click="onPrev" >prev</button>
+                <button class="btn btn-dark" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext">next</button>
             </div>
         </div>
     </div>
@@ -48,41 +48,37 @@ export default {
         return{
         answers:[],
         answerid:'',
-        id:0
 
         }
         
     },
-    computed:mapGetters(['getQuestion','getId','getAmount']),
+    computed:mapGetters(['getQuestion','getId','getAmount','getChosen']),
     methods:{
-        ...mapActions(['fillId']),
+        ...mapActions(['fillId','editChosen','setAnsweredn']),
         // saves the chosen value and add answered count, unchicks next page we're going to if not answered
-        takeValue(toid){
+        takeValue(){
             if(this.answers[this.answerid]){
-                if(this.chosen[this.id] == ''){
-                  this.answeredn++
+                if(this.getChosen == ''){
+                  this.setAnsweredn()
                 }
-                this.chosen[this.id]=this.answers[this.answerid]
-                
-            }
-            if(this.chosen[toid]==''){
-                this.unCheck()
+                this.editChosen(this.answers[this.answerid])
             }
         },
         onNext(){
-            // this.takeValue(this.id+1)
-            // this.page=this.page + 1
-            // this.$router.push({ path: `/question/${this.page}` })
-            // this.updateData()
+            this.takeValue(this.getId+1)
+            this.fillId(this.getId+1)
+            this.$router.push({ path: `/question/${this.getId+2}` })
+            this.updateData()
+            this.unCheck()
             // console.log(this.answeredn)
-            console.log('next')
         },
         onPrev(){
-            // this.takeValue(this.id-1)
-            // this.page=this.page -1
-            // this.$router.push({ path: `/question/${this.page}` })
-            // this.updateData()
-            console.log('prev')
+            this.takeValue(this.getId-1)
+            this.fillId(this.getId-1)
+            this.$router.push({ path: `/question/${this.getId}` })
+            this.unCheck()
+            this.updateData()
+            
         },
         updateData(){
             this.answers=this.getQuestion['incorrect_answers']
