@@ -16,15 +16,16 @@ export default {
   },
   computed:mapGetters(['getQuestion']),
   methods:{
-      ...mapActions(["fetchQuestions",'fillAmount','fillchosen']),
+      ...mapActions(["fetchQuestions",'fillAmount','fillchosen','fillchosenids']),
     startQ(){
       this.$router.push({ path: `/question/1` })
     }
   },
-  created(){
-    this.fetchQuestions()
-    this.fillchosen()
-    this.fillAmount()
+  async created(){
+    await this.fetchQuestions()
+    await this.fillchosen()
+    await this.fillAmount()
+    await this.fillchosenids()
   }
   }
 </script>

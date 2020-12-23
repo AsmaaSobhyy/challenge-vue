@@ -6,25 +6,25 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="0">
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="0" id="0">
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[0]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="1" >
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="1" id="1" >
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[1]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="2" >
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value="2" id ='2' >
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[2]}}
                     </label>
                 </li>
                 <li class="list-group-item px-2">
-                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value= '3' >
+                    <input class="form-check-input mx-3" type="radio" v-model="answerid" value= '3' id='3'>
                     <label class="form-check-label" for="exampleRadios1">
                         {{this.answers[3]}}
                     </label>
@@ -52,39 +52,49 @@ export default {
         }
         
     },
-    computed:mapGetters(['getQuestion','getId','getAmount','getChosen']),
+    computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen']),
     methods:{
-        ...mapActions(['fillId','editChosen','setAnsweredn']),
+        ...mapActions(['fillId','editChosen','setAnsweredn','editChosenid']),
         // saves the chosen value and add answered count, unchicks next page we're going to if not answered
-        takeValue(){
+        async takeValue(toid){
             if(this.answers[this.answerid]){
-                if(this.getChosen == ''){
-                  this.setAnsweredn()
+                if(this.getChosenid == -1){
+                    console.log('add')
+                  await this.setAnsweredn()
                 }
-                this.editChosen(this.answers[this.answerid])
+                await this.editChosen(this.answers[this.answerid])
+                await this.editChosenid(this.answerid)
+                console.log('answerid')
+                console.log(this.getChosenid)
             }
+            this.fillId(toid)
+            this.$router.push({ path: `/question/${toid+1}` })
+            this.updateData()
+            
+            
+
         },
         onNext(){
             this.takeValue(this.getId+1)
-            this.fillId(this.getId+1)
-            this.$router.push({ path: `/question/${this.getId+2}` })
-            this.updateData()
-            this.unCheck()
-            // console.log(this.answeredn)
+            if(this.getChosenid == -1){
+                this.unCheck()
+            }
+            else{
+                console.log(this.getChosenid)
+                document.getElementById('1').checked = true;
+                //console.log('didnt chose')
+            }
         },
         onPrev(){
             this.takeValue(this.getId-1)
-            this.fillId(this.getId-1)
-            this.$router.push({ path: `/question/${this.getId}` })
-            this.unCheck()
-            this.updateData()
-            
         },
         updateData(){
             this.answers=this.getQuestion['incorrect_answers']
             this.answers.push(this.getQuestion['correct_answer'])
             this.answers.sort()
             console.log(this.getQuestion['correct_answer'])
+            //console.log(this.getId)
+            
         },
         unCheck(){
             this.answerid = false;
@@ -94,8 +104,9 @@ export default {
     created() {
         this.fillId(location.pathname.split('/')[2]-1)
         this.id=this.getId
-        console.log(this.getId)
+        //console.log(this.getId)
         this.updateData()
+        //console.log(this.getallchosen)
         }
         
     }

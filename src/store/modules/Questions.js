@@ -7,23 +7,34 @@ const state={
     id:0,
     chosen:[],
     answeredn:0,
+    chosenids:[]
 }
 
 const getters={
     getQuestion : (state) => state.questions[state.id],
+    getallchosen : (state) => state.chosenids,
     getId : (state) => state.id,
     getAmount : (state) => state.amount,
-    getChosen : (state) => state.chosen[state.id]
+    getChosen : (state) => state.chosen[state.id],
+    getChosenid : (state) => state.chosenids[state.id]
 }
 
 const actions ={
     //initial fill chosen array
-    fillchosen({ commit }){
+    async fillchosen({ commit }){
         let X =[]
-        for (var i = 0; i < this.amount; i++) {
-            X.push('')
+        for (var i = 0; i < state.amount; i++) {
+            await X.push('')
         }
         commit('setChosen',X)
+    },
+    async fillchosenids({ commit }){
+        let X =[]
+        //console.log(state.amount)
+        for (var i = 0; i < state.amount; i++) {
+           await X.push(-1)
+        }
+        commit('setChosenids',X)
     },
     async fetchQuestions({ commit }){
         const response = await axios.get(state.api)
@@ -31,19 +42,28 @@ const actions ={
 
         commit('setQuestions',response.data.results)
     },
-    fillAmount({ commit }){
-        commit('setAmount',state.api.split('amount=')[1].split('&')[0])
+    async fillAmount({ commit }){
+        await commit('setAmount',state.api.split('amount=')[1].split('&')[0])
+        //console.log(state.amount)
+
     },
     fillId({commit},id){
         commit('setId',id)
     },
     //add chosen value to array
-    editChosen({ commit },value){
-        commit('setChosed',value)
+    async editChosen({ commit },value){
+        await commit('setChosed',value)
 
     },
-    setAnsweredn({ commit }){
-        commit('fillAnsweredn',state.answeredn+1)
+    async editChosenid({ commit },value){
+        await commit('setChosedid',value)
+
+    },
+    async setAnsweredn({ commit }){
+        let newn = await state.answeredn + 1
+        console.log(newn)
+        await commit('fillAnsweredn',newn)
+        console.log('answared num')
         console.log(state.answeredn)
     }
 
@@ -52,9 +72,11 @@ const actions ={
 const mutations={
     setQuestions:(state,questions)=> (state.questions = questions),
     setChosen : (state,emptyarr) => (state.chosen = emptyarr),
+    setChosenids : (state,emptyarr) => (state.chosenids = emptyarr),
     setAmount : (state,amount) => (state.amount = amount),
     setId : (state,id) => (state.id = id),
     setChosed : (state,value) => (state.chosen[state.id],value),
+    setChosedid : (state,value) => (state.chosenids[state.id],value),
     fillAnsweredn : (state,value) => (state.answeredn,value)
 }
 
