@@ -9,7 +9,7 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <button class="nav-link btn" v-bind:class="{ disabled: (getId+1) <= 1}" v-on:click="onPrev" >Previous</button>
+                    <button class="nav-link btn" v-bind:class="{ disabled: (getId+1) <= 1 && getId > getAmount }" v-on:click="onPrev" >Previous</button>
                     </li>
                     <li class="nav-item">
                     <i class="fas fa-info-circle"></i>
@@ -17,11 +17,11 @@
                     {{this.getId+1}}/10</a>
                     </li>
                     <li class="nav-item">
-                    <button class="nav-link btn" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext" >next</button>
+                    <button class="nav-link btn" v-bind:class="{ disabled:(getId+1) >= getAmount && getId >=1 }" v-on:click="onNext" >next</button>
                     
                     </li>
                     <li class="nav-item">
-                    <button class="nav-link btn" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && (this.answerid != '') && this.getChosenid == -1)  }" v-on:click="onSubmit" >Results</button>
+                    <button class="nav-link btn" v-bind:class="{ disabled: !((getAnsweredn >= getAmount ) && (this.answerid != '') && this.getChosenid == -1)  }" v-on:click="onSubmit" >Results</button>
                     </li>
                 </ul>
                 </div>
@@ -46,7 +46,7 @@ export default {
     data(){
         return{
         answers:[],
-        answerid:''
+        answerid:'',
         }
     },
     computed:mapGetters(['getQuestion','getId','getAmount','getChosen','getChosenid','getallchosen','getallchosen','getAnsweredn']),
@@ -81,32 +81,19 @@ export default {
     async onNext(){
             await this.takeValue()
             this.goto(this.getId+1)
-            if(this.getChosenid == -1){
-                this.unCheck()
-            }
-            else{
-                //console.log(this.getChosenid)
-                //document.getElementById(this.getChosenid).checked = true;
-                console.log('didnt chose')
-            }
+            this.unCheck()
+            
 
-            console.log(this.getallchosen)
-            console.log(this.getAnsweredn)
+            // console.log(this.getallchosen)
+            // console.log(this.getAnsweredn)
 
         },
         async onPrev(){
             await this.takeValue()
             this.goto(this.getId-1)
-            if(this.getChosenid == -1){
-                this.unCheck()
-            }
-            else{
-                //console.log(this.getChosenid)
-                //document.getElementById(this.getChosenid).checked = true;
-                console.log('didnt chose')
-            }
-            console.log(this.getallchosen)
-            console.log(this.getAnsweredn)
+            this.unCheck()
+            // console.log(this.getallchosen)
+            // console.log(this.getAnsweredn)
 
         },
         updateData(){

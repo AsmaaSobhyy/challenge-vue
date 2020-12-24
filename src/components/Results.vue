@@ -15,7 +15,7 @@
                 <tr class ="text-dark" v-for="(question, index) in getQuestions" :key="`question-${index}`" >
                 <td scope="row">{{question['question']}}</td>
                 <td >{{question['correct_answer']}}</td>
-                <td>{{getallchosen[index]}}</td>
+                <td class="text-success" v-bind:class="{ 'text-danger' :!(question['correct_answer'] === getallchosen[index]) }">{{getallchosen[index]}}</td>
                 <td>{{ (question['correct_answer'] === getallchosen[index]) ? 1 : 0 }}</td>
                 </tr>
                 <tr class="table-active font-weight-light">
@@ -25,12 +25,12 @@
                 
             </tbody>
             </table>
-            <button class="btn btn-dark">Restart</button>
+            <button class="btn btn-dark" v-on:click="onRestart">Restart</button>
     </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
     name: "Results",
@@ -39,11 +39,25 @@ export default {
         points:0
 
         }
-
-    },
-    computed:mapGetters(['getQuestions','getAmount','getallchosen','getAnsweredn']),
-    methods:{
         
+    },
+    computed:{
+        ...mapGetters(['getQuestions','getAmount','getallchosen','getAnsweredn']),
+        classObject: function () {
+            return {
+            'text-danger': this.error && this.error.type === 'fatal'
+            }
+        }
+    },
+    methods:{
+        ...mapActions(["fetchQuestions",'fillAmount','fillchosen','fillchosenids']),
+        async onRestart(){
+            await this.fetchQuestions()
+            await this.fillAmount()
+            await this.fillchosen()
+            await this.fillchosenids()
+            this.$router.push({ path: `/` })
+        }
     },
     created(){
         //console.log(this.getallchosen)

@@ -36,8 +36,8 @@
                 <button class="btn btn-dark" v-bind:class="{ disabled:(getId+1) >= getAmount }" v-on:click="onNext">next</button>
             </div>
         </div>
-        <span class="text-muted"></span>
-        <button class="btn btn-dark my-5" v-bind:class="{ disabled: !((getAnsweredn >= getAmount-1 ) && this.getChosenid == -1)  }" v-on:click="onSubmit" >Submit</button>
+        <span class="text-muted d-block"> {{getChosen ? 'you answered ' + getChosen  : 'not answered'}}</span>
+        <button class="btn btn-dark my-5" v-bind:class="{ disabled: (!((getAnsweredn >= getAmount-1 ) && this.getChosenid == -1))  }" v-on:click="onSubmit" >Submit</button>
     </div>
 </template>
 
@@ -81,9 +81,7 @@ export default {
         async onNext(){
             await this.takeValue()
             this.goto(this.getId+1)
-            if(this.getChosenid == -1){
-                this.unCheck()
-            }
+            this.unCheck()
 
             // console.log(this.getallchosen)
             // console.log(this.getAnsweredn)
@@ -92,9 +90,8 @@ export default {
         async onPrev(){
             await this.takeValue()
             this.goto(this.getId-1)
-            if(this.getChosenid == -1){
-                this.unCheck()
-            }
+            this.unCheck()
+            
             // console.log(this.getallchosen)
             // console.log(this.getAnsweredn)
 
@@ -112,6 +109,7 @@ export default {
         },
         async onSubmit(){
             await this.takeValue()
+            this.fillId(this.getId + 1)
             this.$router.push({ path: `/results` })
 
         }
