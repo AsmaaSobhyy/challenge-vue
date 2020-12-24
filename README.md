@@ -1,24 +1,12 @@
 # challenge-vue
 
-## Project setup
+## discription
 ```
-npm install
+a quiz website that uses an api that generates random multiple choice question,the user can move between questions and solve them then submit his results and navigate to the results page where his score is calculated.he can also restart to another set of questions.
 ```
 
-### Compiles and hot-reloads for development
+### to run
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

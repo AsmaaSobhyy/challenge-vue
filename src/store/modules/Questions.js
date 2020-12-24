@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const state={
-    api:"https://opentdb.com/api.php?amount=3&category=18&difficulty=medium&type=multiple",
+    api:"https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple",
     questions:[],
     amount:0,
     id:-1,
